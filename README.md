@@ -124,5 +124,3 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         }
     }
 ```
-PhotoSelector.SELECT_RESULT是接收数据的key。数据是以ArrayList的字符串数组返回的，就算是单选，返回的也是ArrayList数组，只不过这时候ArrayList只有一条数据而已。ArrayList里面的数据就是选中的图片的文件路径。
-
