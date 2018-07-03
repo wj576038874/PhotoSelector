@@ -27,6 +27,7 @@ PhotoSelector的图片加载是基于glide4.7.1实现的，可以自定义加载
 
 
 **3、使用**
+
 在你的项目中的AndroidManifest文件中添加以下配置
 ```
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -51,6 +52,7 @@ PhotoSelector的图片加载是基于glide4.7.1实现的，可以自定义加载
 ```
 
 **3、调起图片选择器**
+
 调用的是很简单，只需要一句代码，其他可选择性配置
 ```java
 //多选(最多9张)
