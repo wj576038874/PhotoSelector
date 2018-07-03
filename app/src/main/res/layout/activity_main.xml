@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:logo="@mipmap/ic_launcher"
+        app:title="imageSelector"
+        app:titleMarginStart="20dp"
+        app:titleTextColor="#fff" />
+
+    <Button
+        android:id="@+id/btn_single"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="单选" />
+
+    <Button
+        android:id="@+id/btn_limit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="多选(最多9张)" />
+
+    <Button
+        android:id="@+id/btn_unlimited"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="多选(不限数量)" />
+
+    <Button
+        android:id="@+id/btn_clip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="选择后剪裁" />
+
+    <Button
+        android:id="@+id/btn_take_clip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="拍照后剪裁" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageview"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@mipmap/ic_launcher"
+        app:civ_border_color="@color/colorPrimary"
+        app:civ_border_width="1dp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1" />
+
+</LinearLayout>
