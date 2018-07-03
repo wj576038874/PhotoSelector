@@ -4,8 +4,8 @@ Android图片选择器，仿微信的图片选择器的样式和效果。可横�
 
 效果图：
 
-![相册](https://github.com/donkingliang/ImageSelector/blob/master/%E6%95%88%E6%9E%9C%E5%9B%BE/%E7%9B%B8%E5%86%8C.jpg)  ![文件夹](https://github.com/donkingliang/ImageSelector/blob/master/%E6%95%88%E6%9E%9C%E5%9B%BE/%E6%96%87%E4%BB%B6%E5%A4%B9.jpg)  ![预览](https://github.com/donkingliang/ImageSelector/blob/master/%E6%95%88%E6%9E%9C%E5%9B%BE/%E9%A2%84%E8%A7%88.jpg)
-
+![相册](https://github.com/wj576038874/PhotoSelectorDemo/blob/master/images/selector.jpg)  ![文件夹](https://github.com/wj576038874/PhotoSelectorDemo/blob/master/images/folder.jpg)  ![预览](https://github.com/wj576038874/PhotoSelectorDemo/blob/master/images/preview.jpg)
+![预览列表](https://github.com/wj576038874/PhotoSelectorDemo/blob/master/images/preview_list.jpg) ![裁剪](https://github.com/wj576038874/PhotoSelectorDemo/blob/master/images/clip.jpg)
 ###1、引入依赖###
 
 在Module的build.gradle在添加以下代码
