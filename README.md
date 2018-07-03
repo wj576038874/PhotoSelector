@@ -15,7 +15,7 @@ Android图片选择器，仿微信的图片选择器的样式和效果。可横�
 在Module的build.gradle在添加以下代码
 
 ```
-implementation 'com.winfo.photoselector:PhotoSelector:1.0.0'
+implementation 'com.winfo.photoselector:PhotoSelector:1.1.0'
 ```
 
 
