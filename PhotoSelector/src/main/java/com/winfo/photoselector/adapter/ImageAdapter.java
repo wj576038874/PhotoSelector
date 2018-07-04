@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.winfo.photoselector.R;
 import com.winfo.photoselector.entity.Image;
@@ -92,9 +93,9 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 image.setPosition(position);
             }
             Glide.with(mContext).load(image.getPath())
-                    .transition(new GenericTransitionOptions<>().transition(R.anim.glide_anim))
-//                    .transition(new GenericTransitionOptions<>().transition(android.R.anim.slide_in_left))
-//                    .transition(new DrawableTransitionOptions().crossFade(200))
+//                    .transition(new GenericTransitionOptions<>().transition(R.anim.glide_anim))
+                    .transition(new GenericTransitionOptions<>().transition(android.R.anim.slide_in_left))
+                    .transition(new DrawableTransitionOptions().crossFade(150))
                     .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE)
                             .centerCrop()
                             .placeholder(R.drawable.ic_image).error(R.drawable.ic_img_load_fail))
