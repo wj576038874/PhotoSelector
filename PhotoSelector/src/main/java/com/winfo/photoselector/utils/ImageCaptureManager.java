@@ -26,8 +26,6 @@ import java.util.Locale;
 public class ImageCaptureManager {
 
     private final static String CAPTURED_PHOTO_PATH_KEY = "mCurrentPhotoPath";
-    public static final int REQUEST_TAKE_PHOTO = 1;//普通拍照
-    public static final int REQUEST_TAKE_CUT_PHOTO = 2;//剪切拍照
     public static final String PHOTO_PATH = "photo_path";
 
     private String mCurrentPhotoPath;
