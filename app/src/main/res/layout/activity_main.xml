@@ -41,13 +41,11 @@
         android:layout_height="wrap_content"
         android:text="剪裁" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:id="@+id/imageview"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@mipmap/ic_launcher"
-        app:civ_border_color="@color/colorPrimary"
-        app:civ_border_width="1dp" />
+        android:src="@mipmap/ic_launcher" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_image"
