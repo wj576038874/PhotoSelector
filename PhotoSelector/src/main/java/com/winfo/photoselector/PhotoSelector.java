@@ -3,10 +3,13 @@ package com.winfo.photoselector;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+
 import com.winfo.photoselector.utils.PermissionsUtils;
+import com.yalantis.ucrop.UCrop;
 
 import java.util.ArrayList;
 
@@ -27,6 +30,17 @@ public class PhotoSelector {
      */
     public static final int DEFAULT_REQUEST_CODE = 999;
 
+    /**
+     * 拍照裁剪
+     */
+    public static final int TAKE_PHOTO_CROP_REQUESTCODE = 1001;
+
+    /**
+     * 拍照 不裁剪
+     */
+    public static final int TAKE_PHOTO_REQUESTCODE = 1002;
+
+    public static final int CROP_REQUESTCODE = 1003;
 
     /**
      * 图片选择的结果
@@ -59,14 +73,19 @@ public class PhotoSelector {
     public static final String EXTRA_SINGLE = "single";
 
     /**
+     * 是否裁剪
+     */
+    public static final String EXTRA_CROP = "is_crop";
+
+    /**
      * toolbar和bottombar是否为material design风格
      */
     public static final String EXTRA_MATERIAL_DESIGN = "material_design";
 
-    /**
-     * 拍照完成之后是否直接进行裁剪
-     */
-    public static final String EXTRA_CUTAFTERPHOTOGRAPH = "cutAfterPhotograph";
+//    /**
+//     * 拍照完成之后是否直接进行裁剪
+//     */
+//    public static final String EXTRA_CUTAFTERPHOTOGRAPH = "cutAfterPhotograph";
 
     /**
      * toolBar的颜色值
@@ -97,6 +116,17 @@ public class PhotoSelector {
     public static final int RESULT_CODE = 0x00000012;
 
     public static final String IS_CONFIRM = "is_confirm";
+
+
+    /**
+     * 获取裁剪之后的图片的uri
+     *
+     * @param intent data
+     * @return uri
+     */
+    public static Uri getCropImageUri(@NonNull Intent intent) {
+        return UCrop.getOutput(intent);
+    }
 
 
     public static PhotoSelectorBuilder builder() {
@@ -153,19 +183,19 @@ public class PhotoSelector {
             return this;
         }
 
-        /**
-         * 设置最大选择数量
-         *
-         * @param cutAfterPhotograph 拍照之后是否科技进行裁剪
-         * @return PhotoSelectorBuilder
-         */
-        public PhotoSelectorBuilder setCutAfterPhotograph(boolean cutAfterPhotograph) {
-            mPickerOptionsBundle.putBoolean(EXTRA_CUTAFTERPHOTOGRAPH, cutAfterPhotograph);
-            return this;
-        }
+//        /**
+//         * 拍照之后是否科技进行裁剪
+//         *
+//         * @param cutAfterPhotograph 拍照之后是否科技进行裁剪
+//         * @return PhotoSelectorBuilder
+//         */
+//        public PhotoSelectorBuilder setCutAfterPhotograph(boolean cutAfterPhotograph) {
+//            mPickerOptionsBundle.putBoolean(EXTRA_CUTAFTERPHOTOGRAPH, cutAfterPhotograph);
+//            return this;
+//        }
 
         /**
-         * 设置最大选择数量
+         * 是否是单选
          *
          * @param isSingle 是否是单选
          * @return PhotoSelectorBuilder
@@ -176,7 +206,7 @@ public class PhotoSelector {
         }
 
         /**
-         * 设置最大选择数量
+         * 设置列数
          *
          * @param columnCount 列数
          * @return PhotoSelectorBuilder
@@ -187,7 +217,7 @@ public class PhotoSelector {
         }
 
         /**
-         * 设置最大选择数量
+         * 是否显示拍照
          *
          * @param showCamera 是否显示拍照
          * @return PhotoSelectorBuilder
@@ -198,7 +228,7 @@ public class PhotoSelector {
         }
 
         /**
-         * 设置最大选择数量
+         * 已经选择的照片集合
          *
          * @param selected 已经选择的照片集合
          * @return PhotoSelectorBuilder
@@ -209,7 +239,7 @@ public class PhotoSelector {
         }
 
         /**
-         * 设置最大选择数量
+         * toolBar的颜色
          *
          * @param toolBarColor toolBar的颜色
          * @return PhotoSelectorBuilder
@@ -220,7 +250,7 @@ public class PhotoSelector {
         }
 
         /**
-         * 设置最大选择数量
+         * bottomBar的颜色
          *
          * @param bottomBarColor bottomBar的颜色
          * @return PhotoSelectorBuilder
@@ -231,7 +261,7 @@ public class PhotoSelector {
         }
 
         /**
-         * 设置最大选择数量
+         * 状态栏的颜色
          *
          * @param statusBarColor 状态栏的颜色
          * @return PhotoSelectorBuilder
@@ -242,13 +272,23 @@ public class PhotoSelector {
         }
 
         /**
-         * 设置最大选择数量
+         * oolbar和bototmbar是否显示materialDesign风格
          *
          * @param materialDesign toolbar和bototmbar是否显示materialDesign风格
          * @return PhotoSelectorBuilder
          */
         public PhotoSelectorBuilder setMaterialDesign(boolean materialDesign) {
             mPickerOptionsBundle.putBoolean(EXTRA_MATERIAL_DESIGN, materialDesign);
+            return this;
+        }
+
+        /**
+         * 是否裁剪，剪切，修剪
+         *
+         * @return PhotoSelectorBuilder
+         */
+        public PhotoSelectorBuilder setCrop(boolean isCrop) {
+            mPickerOptionsBundle.putBoolean(EXTRA_CROP, isCrop);
             return this;
         }
     }
