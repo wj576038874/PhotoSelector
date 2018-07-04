@@ -87,11 +87,12 @@ public class ImageSelectorActivity extends AppCompatActivity {
     private int column;
     private boolean isSingle;
     private boolean showCamera;
-    private boolean cutAfterPhotograph;
+    //    private boolean cutAfterPhotograph;
     private int mMaxCount;
     //用于接收从外面传进来的已选择的图片列表。当用户原来已经有选择过图片，现在重新打开选择器，允许用
     // 户把先前选过的图片传进来，并把这些图片默认为选中状态。
     private ArrayList<String> mSelectedImages;
+    private boolean isCrop;//是否裁剪
 
     private Toolbar toolbar;
 
@@ -119,9 +120,10 @@ public class ImageSelectorActivity extends AppCompatActivity {
         assert bundle != null;
         mMaxCount = bundle.getInt(PhotoSelector.EXTRA_MAX_SELECTED_COUNT, PhotoSelector.DEFAULT_MAX_SELECTED_COUNT);
         column = bundle.getInt(PhotoSelector.EXTRA_GRID_COLUMN, PhotoSelector.DEFAULT_GRID_COLUMN);
-        cutAfterPhotograph = bundle.getBoolean(PhotoSelector.EXTRA_CUTAFTERPHOTOGRAPH, false);
+//        cutAfterPhotograph = bundle.getBoolean(PhotoSelector.EXTRA_CUTAFTERPHOTOGRAPH, false);
         isSingle = bundle.getBoolean(PhotoSelector.EXTRA_SINGLE, false);
         showCamera = bundle.getBoolean(PhotoSelector.EXTRA_SHOW_CAMERA, true);
+        isCrop = bundle.getBoolean(PhotoSelector.EXTRA_CROP, false);
         mSelectedImages = bundle.getStringArrayList(PhotoSelector.EXTRA_SELECTED_IMAGES);
         captureManager = new ImageCaptureManager(this);
         toolBarColor = bundle.getInt(PhotoSelector.EXTRA_TOOLBARCOLOR, ContextCompat.getColor(this, R.color.blue));
@@ -194,7 +196,12 @@ public class ImageSelectorActivity extends AppCompatActivity {
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirm();
+                if (isCrop && isSingle) {
+                    //选择之后
+                    crop(mAdapter.getSelectImages().get(0).getPath(), UCrop.REQUEST_CROP);
+                } else {
+                    confirm();
+                }
             }
         });
 
@@ -233,6 +240,30 @@ public class ImageSelectorActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * 裁剪
+     *
+     * @param imagePath   照片的路径
+     * @param requestCode 请求code 分选择之后  和 拍照之后
+     */
+    private void crop(@NonNull String imagePath, int requestCode) {
+        //选择之后剪切
+        Uri selectUri = Uri.fromFile(new File(imagePath));
+        SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA);
+        long time = System.currentTimeMillis();
+        String imageName = timeFormatter.format(new Date(time));
+        UCrop uCrop = UCrop.of(selectUri, Uri.fromFile(new File(getCacheDir(), imageName + ".jpg")));
+        UCrop.Options options = new UCrop.Options();
+        options.setToolbarColor(toolBarColor);
+        options.setStatusBarColor(statusBarColor);
+        options.setActiveWidgetColor(bottomBarColor);
+        options.setCompressionQuality(100);
+        options.setFreeStyleCropEnabled(false);
+        uCrop.withOptions(options);
+        uCrop.start(ImageSelectorActivity.this, requestCode);
+    }
+
 
     /**
      * 修改topbar的颜色
@@ -302,13 +333,13 @@ public class ImageSelectorActivity extends AppCompatActivity {
     private void openCamera() {
         try {
             Intent intent = captureManager.dispatchTakePictureIntent();
-            //如果设置了拍照成功之后 直接进行剪切界面，则传递 REQUEST_TAKE_CUT_PHOTO 然后再onActivityResult中进行判断
-            if (cutAfterPhotograph) {
+            //如果设置了裁剪 拍照成功之后直接进行剪切界面，则传递 TAKE_PHOTO_CROP_REQUESTCODE 然后再onActivityResult中进行判断
+            if (isCrop && isSingle) {
                 //获取拍照保存的照片的路径
                 filePath = intent.getStringExtra(ImageCaptureManager.PHOTO_PATH);
-                startActivityForResult(intent, ImageCaptureManager.REQUEST_TAKE_CUT_PHOTO);
+                startActivityForResult(intent, PhotoSelector.TAKE_PHOTO_CROP_REQUESTCODE);
             } else {
-                startActivityForResult(intent, ImageCaptureManager.REQUEST_TAKE_PHOTO);
+                startActivityForResult(intent, PhotoSelector.TAKE_PHOTO_REQUESTCODE);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -518,47 +549,24 @@ public class ImageSelectorActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PhotoSelector.RESULT_CODE) {
-            if (data != null && data.getBooleanExtra(PhotoSelector.IS_CONFIRM, false)) {
-                //如果用户在预览页点击了确定，就直接把用户选中的图片返回给用户。
-                confirm();
-            } else {
-                //否则，就刷新当前页面。
-                mAdapter.notifyDataSetChanged();
-                setSelectImageCount(mAdapter.getSelectImages().size());
-            }
-        } else if (requestCode == ImageCaptureManager.REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            //拍照完成了，重新加载照片的列表，不进入剪切界面
-            loadImageForSDCard();
-            setSelectImageCount(mAdapter.getSelectImages().size());
-            mSelectedImages = new ArrayList<>();
-            for (Image image : mAdapter.getSelectImages()) {
-                mSelectedImages.add(image.getPath());
-            }
-            mAdapter.setSelectedImages(mSelectedImages);
-            mAdapter.notifyDataSetChanged();
-        } else if (requestCode == ImageCaptureManager.REQUEST_TAKE_CUT_PHOTO && resultCode == RESULT_OK) {
-            //拍照完成了，获取到照片之后直接进入剪切界面
-            Uri selectUri = Uri.fromFile(new File(filePath));
-            SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA);
-            long time = System.currentTimeMillis();
-            String imageName = timeFormatter.format(new Date(time));
-            UCrop uCrop = UCrop.of(selectUri, Uri.fromFile(new File(getCacheDir(), imageName + ".jpg")));
-            UCrop.Options options = new UCrop.Options();
-            options.setCompressionQuality(100);
-            options.setToolbarColor(toolBarColor);
-            options.setStatusBarColor(statusBarColor);
-            options.setActiveWidgetColor(bottomBarColor);
-            options.setFreeStyleCropEnabled(false);
-            uCrop.withOptions(options);
-            uCrop.start(this);
-        } else if (requestCode == UCrop.REQUEST_CROP) {
-            if (data != null) {
-                //剪切完成之后把数据传递给下一层,把select_result设置为null 在onActivityResult获取这个数据，如果为null则代表是剪切的图片
-                data.putStringArrayListExtra(PhotoSelector.SELECT_RESULT, null);
-                setResult(RESULT_OK, data);
-                finish();
-            } else {
+        switch (requestCode) {
+            case PhotoSelector.RESULT_CODE: //预览
+                if (data != null && data.getBooleanExtra(PhotoSelector.IS_CONFIRM, false)) {
+                    //如果用户在预览界面点击了确定，并且是单选裁剪模式那么就进行裁剪
+                    if (isSingle && isCrop) {
+                        crop(mAdapter.getSelectImages().get(0).getPath(), UCrop.REQUEST_CROP);
+                    } else {
+                        //如果用户在预览页点击了确定，就直接把用户选中的图片返回给用户。
+                        confirm();
+                    }
+                } else {
+                    //否则，就刷新当前页面。
+                    mAdapter.notifyDataSetChanged();
+                    setSelectImageCount(mAdapter.getSelectImages().size());
+                }
+                break;
+            case PhotoSelector.TAKE_PHOTO_REQUESTCODE://拍照不裁剪
+                //拍照完成了，重新加载照片的列表，不进入剪切界面
                 loadImageForSDCard();
                 setSelectImageCount(mAdapter.getSelectImages().size());
                 mSelectedImages = new ArrayList<>();
@@ -567,9 +575,41 @@ public class ImageSelectorActivity extends AppCompatActivity {
                 }
                 mAdapter.setSelectedImages(mSelectedImages);
                 mAdapter.notifyDataSetChanged();
-            }
-        }
+                break;
+            case PhotoSelector.TAKE_PHOTO_CROP_REQUESTCODE://拍照裁剪，进入裁剪界面传递requestcode
+                //拍照完成了，获取到照片之后直接进入剪切界面,用户可能没有确定剪切
+                crop(filePath, PhotoSelector.CROP_REQUESTCODE);
+                break;
+            case UCrop.REQUEST_CROP:
+                //选择之后裁剪，获取到裁剪的数据直接返回
+                if (data != null) {
+                    setResult(RESULT_OK, data);
+                    finish();
+                } else {
+                    //如果选择之后没有裁剪 用户按返回键的话，那么data就是null做下判断，就刷新当前页面。
+                    mAdapter.notifyDataSetChanged();
+                    setSelectImageCount(mAdapter.getSelectImages().size());
+                }
+                break;
+            case PhotoSelector.CROP_REQUESTCODE://拍照成功之后去裁剪，裁剪返回的结果
+                //拍照之后裁剪，如果拍照成功之后没有裁剪 用户按返回键的话，那么data就是null的做下判断，就刷新列表加载出用户拍照的照片
+                // 如果data不为null就说明他裁剪了
+                if (data != null) {
+                    setResult(RESULT_OK, data);
+                    finish();
+                } else {
+                    loadImageForSDCard();
+                    setSelectImageCount(mAdapter.getSelectImages().size());
+                    mSelectedImages = new ArrayList<>();
+                    for (Image image : mAdapter.getSelectImages()) {
+                        mSelectedImages.add(image.getPath());
+                    }
+                    mAdapter.setSelectedImages(mSelectedImages);
+                    mAdapter.notifyDataSetChanged();
+                }
+                break;
 
+        }
     }
 
     /**
