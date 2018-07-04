@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mAdapter.refresh(images);
                     break;
                 case CROP_CODE:
-                    Uri resultUri = PhotoSelector.getCropImage(data);
+                    Uri resultUri = PhotoSelector.getCropImageUri(data);
                     Glide.with(this).load(resultUri).into(imageView);
                     break;
                 case UN_LIMITT_CODE:
