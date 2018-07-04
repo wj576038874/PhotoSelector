@@ -40,7 +40,7 @@ publish {
     userOrg = 'wenjie940409'//bintray.com你的用户名
     groupId = 'com.winfo.photoselector'//jcenter上的路径
     artifactId = 'PhotoSelector'//项目名称
-    publishVersion = '1.1.0'//版本号
+    publishVersion = '1.2.0'//版本号
     desc = 'PhotoSelector'//描述，不重要
     website = 'https://github.com/wj576038874'//网站，不重要；尽量模拟github上的地址，例如我这样的；当然你有地址最好了
 }
