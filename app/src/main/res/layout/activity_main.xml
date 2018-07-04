@@ -39,13 +39,7 @@
         android:id="@+id/btn_clip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="选择后剪裁" />
-
-    <Button
-        android:id="@+id/btn_take_clip"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="拍照后剪裁" />
+        android:text="剪裁" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageview"
