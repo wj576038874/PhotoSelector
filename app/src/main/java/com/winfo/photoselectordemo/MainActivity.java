@@ -8,11 +8,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
 import com.bumptech.glide.Glide;
 import com.winfo.photoselector.PhotoSelector;
 import com.yalantis.ucrop.UCrop;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,10 +24,10 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private final static int duoxuan = 10001;
-    private final static int danxuan = 1002;
-    private final static int buxian = 1003;
-    private final static int clip = 1004;
+    private static final int SINGLE_CODE = 1;//单选
+    private static final int LIMIT_CODE = 2;//多选限制数量
+    private static final int CROP_CODE = 3;//剪切裁剪
+    private static final int UN_LIMITT_CODE = 4;//多选不限制数量
 
     private ImageAdapter mAdapter;
     private ImageView imageView;
@@ -43,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btn_limit).setOnClickListener(this);
         findViewById(R.id.btn_unlimited).setOnClickListener(this);
         findViewById(R.id.btn_clip).setOnClickListener(this);
-        findViewById(R.id.btn_take_clip).setOnClickListener(this);
     }
 
     private ArrayList<String> images;
@@ -52,39 +54,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && data != null) {
-            images = data.getStringArrayListExtra(PhotoSelector.SELECT_RESULT);
             switch (requestCode) {
-                case clip:
-                    //拍照直接剪切
-                    if (images == null) {
-                        Uri resultUri = UCrop.getOutput(data);
-                        Glide.with(this).load(resultUri).into(imageView);
-                        return;
-                    }
-                    //选择之后剪切
-                    Uri selectUri = Uri.fromFile(new File(images.get(0)));
-                    SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA);
-                    long time = System.currentTimeMillis();
-                    String imageName = timeFormatter.format(new Date(time));
-                    UCrop uCrop = UCrop.of(selectUri, Uri.fromFile(new File(getCacheDir(), imageName + ".jpg")));
-                    UCrop.Options options = new UCrop.Options();
-                    options.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary));
-                    options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
-                    options.setActiveWidgetColor(ContextCompat.getColor(this, R.color.colorPrimary));
-                    options.setCompressionQuality(100);
-                    options.setFreeStyleCropEnabled(false);
-                    uCrop.withOptions(options);
-                    uCrop.start(this);
+                case SINGLE_CODE:
+                    //单选的话 images就只有一条数据直接get(0)即可
+                    images = data.getStringArrayListExtra(PhotoSelector.SELECT_RESULT);
+                    mAdapter.refresh(images);
                     break;
-                case 1005:
-                    Uri resultUri2 = UCrop.getOutput(data);
-                    Glide.with(this).load(resultUri2).into(imageView);
+                case LIMIT_CODE:
+                    images = data.getStringArrayListExtra(PhotoSelector.SELECT_RESULT);
+                    mAdapter.refresh(images);
                     break;
-                case UCrop.REQUEST_CROP:
-                    Uri resultUri = UCrop.getOutput(data);
+                case CROP_CODE:
+                    Uri resultUri = PhotoSelector.getCropImage(data);
                     Glide.with(this).load(resultUri).into(imageView);
                     break;
-                default:
+                case UN_LIMITT_CODE:
+                    images = data.getStringArrayListExtra(PhotoSelector.SELECT_RESULT);
                     mAdapter.refresh(images);
                     break;
             }
@@ -98,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //单选
                 PhotoSelector.builder()
                         .setSingle(true)
-                        .start(MainActivity.this, danxuan);
+                        .start(MainActivity.this, SINGLE_CODE);
                 break;
 
             case R.id.btn_limit:
@@ -112,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .setToolBarColor(ContextCompat.getColor(this, R.color.colorPrimary))//toolbar的颜色
                         .setBottomBarColor(ContextCompat.getColor(this, R.color.colorPrimary))//底部bottombar的颜色
                         .setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary))//状态栏的颜色
-                        .start(MainActivity.this, duoxuan);//当前activity 和 requestCode，不传requestCode则默认为PhotoSelector.DEFAULT_REQUEST_CODE
+                        .start(MainActivity.this, LIMIT_CODE);//当前activity 和 requestCode，不传requestCode则默认为PhotoSelector.DEFAULT_REQUEST_CODE
                 break;
 
             case R.id.btn_unlimited:
@@ -120,33 +105,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 PhotoSelector.builder()
                         .setMaxSelectCount(-1)//-1不限制数量
                         .setSelected(images)
-                        .start(MainActivity.this, buxian);
-
+                        .start(MainActivity.this, UN_LIMITT_CODE);
                 break;
 
             case R.id.btn_clip:
                 //单选后剪裁 裁剪的话都是针对一张图片所以要设置setSingle(true)
                 PhotoSelector.builder()
                         .setSingle(true)
+                        .setCrop(true)
                         .setStatusBarColor(ContextCompat.getColor(this, R.color.colorAccent))
                         .setToolBarColor(ContextCompat.getColor(this, R.color.colorAccent))
                         .setBottomBarColor(ContextCompat.getColor(this, R.color.colorAccent))
                         .setStatusBarColor(ContextCompat.getColor(this, R.color.colorAccent))
-                        .start(MainActivity.this, clip);
+                        .start(MainActivity.this, CROP_CODE);
                 break;
-
-            case R.id.btn_take_clip:
-                //拍照和单选之后都可以裁剪  裁剪的话都是针对一张图片所以要设置setSingle(true)
-                PhotoSelector.builder()
-                        .setSingle(true)
-                        .setCutAfterPhotograph(true)
-                        .setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
-                        .setToolBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
-                        .setBottomBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
-                        .setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
-                        .start(MainActivity.this, clip);
-                break;
-
         }
     }
 }
