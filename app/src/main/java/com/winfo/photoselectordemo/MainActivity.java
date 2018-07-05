@@ -8,19 +8,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.winfo.photoselector.PhotoSelector;
-import com.yalantis.ucrop.UCrop;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -111,8 +105,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_clip:
                 //单选后剪裁 裁剪的话都是针对一张图片所以要设置setSingle(true)
                 PhotoSelector.builder()
-                        .setSingle(true)
-                        .setCrop(true)
+                        .setSingle(true)//单选，裁剪都是单选
+                        .setCrop(true)//是否裁剪
+                        .setCropMode(PhotoSelector.CROP_RECTANG)//设置裁剪模式 矩形还是圆形
                         .setStatusBarColor(ContextCompat.getColor(this, R.color.colorAccent))
                         .setToolBarColor(ContextCompat.getColor(this, R.color.colorAccent))
                         .setBottomBarColor(ContextCompat.getColor(this, R.color.colorAccent))
