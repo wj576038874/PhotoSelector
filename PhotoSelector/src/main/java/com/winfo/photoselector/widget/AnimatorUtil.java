@@ -27,11 +27,6 @@ import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 
-/**
- * Created on 2016/7/14.
- *
- * @author Yan Zhenjie.
- */
 public class AnimatorUtil {
 
     private static LinearOutSlowInInterpolator FAST_OUT_SLOW_IN_INTERPOLATOR = new LinearOutSlowInInterpolator();

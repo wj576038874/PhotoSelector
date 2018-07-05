@@ -17,12 +17,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-/**
- * Created by donglua on 15/6/23.
- * <p>
- * <p>
- * http://developer.android.com/training/camera/photobasics.html
- */
 public class ImageCaptureManager {
 
     private final static String CAPTURED_PHOTO_PATH_KEY = "mCurrentPhotoPath";

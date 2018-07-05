@@ -15,11 +15,6 @@ import android.view.WindowManager;
 import java.lang.reflect.Field;
 
 
-/**
- * Created by Horrarndoo on 2017/8/31.
- * <p>
- * StatusBar工具类
- */
 public class StatusBarUtils {
 
     private static final int DEFAULT_STATUS_BAR_ALPHA = 0;

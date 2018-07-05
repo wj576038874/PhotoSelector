@@ -4,10 +4,6 @@ import android.Manifest;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
-/**
- * Created by donglua on 2016/10/19.
- */
-
 public class PermissionsConstant {
 
     public static final int REQUEST_CAMERA = 1;

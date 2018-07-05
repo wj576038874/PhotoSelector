@@ -11,9 +11,6 @@ import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
-/**
- * Created by donglua on 2016/10/19.
- */
 
 public class PermissionsUtils {
 
