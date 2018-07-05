@@ -66,7 +66,7 @@ PhotoSelector的图片加载是基于glide4.7.1实现的，可以自定义加载
 
 调用的是很简单，只需要一句代码，其他可选择性配置
 ```java
-//多选(最多9张)
+ //多选(最多9张)
 PhotoSelector.builder()
         .setShowCamera(true)//显示拍照
         .setMaxSelectCount(9)//最大选择9 默认9，如果这里设置为-1则是不限数量
@@ -78,8 +78,8 @@ PhotoSelector.builder()
         .setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary))//状态栏的颜色
         .start(MainActivity.this, LIMIT_CODE);//当前activity 和 requestCode，不传requestCode则默认为PhotoSelector.DEFAULT_REQUEST_CODE
         
-//裁剪
-//单选后剪裁 裁剪的话都是针对一张图片所以要设置setSingle(true)
+ //裁剪
+ //单选后剪裁 裁剪的话都是针对一张图片所以要设置setSingle(true)
 PhotoSelector.builder()
        .setSingle(true)//单选，裁剪都是单选
        .setCrop(true)//是否裁剪
@@ -90,13 +90,13 @@ PhotoSelector.builder()
        .setStatusBarColor(ContextCompat.getColor(this, R.color.colorAccent))
        .start(MainActivity.this, CROP_CODE);
 
-//多选(不限数量)
+ //多选(不限数量)
 PhotoSelector.builder()
        .setMaxSelectCount(-1)//-1不限制数量
        .setSelected(images)
        .start(MainActivity.this, UN_LIMITT_CODE);
 
-//单选
+ //单选
 PhotoSelector.builder()
        .setSingle(true)
        .start(MainActivity.this, SINGLE_CODE);
@@ -130,7 +130,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
                 images = data.getStringArrayListExtra(PhotoSelector.SELECT_RESULT);
                 mAdapter.refresh(images);
                 break;
-            }
         }
     }
+}
 ```
