@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mAdapter.refresh(images);
                     break;
                 case CROP_CODE:
+                    //获取到裁剪后的图片的Uri进行处理
                     Uri resultUri = PhotoSelector.getCropImageUri(data);
                     Glide.with(this).load(resultUri).into(imageView);
                     break;
