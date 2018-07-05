@@ -7,13 +7,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
-
 import com.winfo.photoselector.utils.PermissionsUtils;
 import com.yalantis.ucrop.UCrop;
-
 import java.util.ArrayList;
 
 public class PhotoSelector {
+
+
+    public static final int CROP_RECTANG = 1;
+    public static final int CROP_CIRCLE = 2;
 
     /**
      * 默认最大选择数
@@ -29,6 +31,9 @@ public class PhotoSelector {
      * 默认的requesrCode
      */
     public static final int DEFAULT_REQUEST_CODE = 999;
+
+
+    public static final int RESULT_CODE = 1000;
 
     /**
      * 拍照裁剪
@@ -77,15 +82,13 @@ public class PhotoSelector {
      */
     public static final String EXTRA_CROP = "is_crop";
 
+    public static final String EXTRA_CROP_MODE = "crop_mode";
+
     /**
      * toolbar和bottombar是否为material design风格
      */
     public static final String EXTRA_MATERIAL_DESIGN = "material_design";
 
-//    /**
-//     * 拍照完成之后是否直接进行裁剪
-//     */
-//    public static final String EXTRA_CUTAFTERPHOTOGRAPH = "cutAfterPhotograph";
 
     /**
      * toolBar的颜色值
@@ -113,7 +116,6 @@ public class PhotoSelector {
      */
     public static final String EXTRA_ISPREVIEW = "isPreview";
 
-    public static final int RESULT_CODE = 0x00000012;
 
     public static final String IS_CONFIRM = "is_confirm";
 
@@ -182,17 +184,6 @@ public class PhotoSelector {
             mPickerOptionsBundle.putInt(EXTRA_MAX_SELECTED_COUNT, maxSelectCount);
             return this;
         }
-
-//        /**
-//         * 拍照之后是否科技进行裁剪
-//         *
-//         * @param cutAfterPhotograph 拍照之后是否科技进行裁剪
-//         * @return PhotoSelectorBuilder
-//         */
-//        public PhotoSelectorBuilder setCutAfterPhotograph(boolean cutAfterPhotograph) {
-//            mPickerOptionsBundle.putBoolean(EXTRA_CUTAFTERPHOTOGRAPH, cutAfterPhotograph);
-//            return this;
-//        }
 
         /**
          * 是否是单选
@@ -291,5 +282,17 @@ public class PhotoSelector {
             mPickerOptionsBundle.putBoolean(EXTRA_CROP, isCrop);
             return this;
         }
+
+        /**
+         * 设置裁剪的样式
+         *
+         * @param mode 圆形 矩形
+         * @return PhotoSelectorBuilder
+         */
+        public PhotoSelectorBuilder setCropMode(int mode) {
+            mPickerOptionsBundle.putInt(EXTRA_CROP_MODE, mode);
+            return this;
+        }
+
     }
 }
