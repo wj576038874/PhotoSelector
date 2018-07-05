@@ -93,6 +93,7 @@ public class ImageSelectorActivity extends AppCompatActivity {
     // 户把先前选过的图片传进来，并把这些图片默认为选中状态。
     private ArrayList<String> mSelectedImages;
     private boolean isCrop;//是否裁剪
+    private int cropMode;//裁剪样式
 
     private Toolbar toolbar;
 
@@ -120,8 +121,8 @@ public class ImageSelectorActivity extends AppCompatActivity {
         assert bundle != null;
         mMaxCount = bundle.getInt(PhotoSelector.EXTRA_MAX_SELECTED_COUNT, PhotoSelector.DEFAULT_MAX_SELECTED_COUNT);
         column = bundle.getInt(PhotoSelector.EXTRA_GRID_COLUMN, PhotoSelector.DEFAULT_GRID_COLUMN);
-//        cutAfterPhotograph = bundle.getBoolean(PhotoSelector.EXTRA_CUTAFTERPHOTOGRAPH, false);
         isSingle = bundle.getBoolean(PhotoSelector.EXTRA_SINGLE, false);
+        cropMode = bundle.getInt(PhotoSelector.EXTRA_CROP_MODE, 1);
         showCamera = bundle.getBoolean(PhotoSelector.EXTRA_SHOW_CAMERA, true);
         isCrop = bundle.getBoolean(PhotoSelector.EXTRA_CROP, false);
         mSelectedImages = bundle.getStringArrayList(PhotoSelector.EXTRA_SELECTED_IMAGES);
@@ -255,11 +256,36 @@ public class ImageSelectorActivity extends AppCompatActivity {
         String imageName = timeFormatter.format(new Date(time));
         UCrop uCrop = UCrop.of(selectUri, Uri.fromFile(new File(getCacheDir(), imageName + ".jpg")));
         UCrop.Options options = new UCrop.Options();
+        if (cropMode == 2) {
+            options.setCircleDimmedLayer(true);//是否显示圆形裁剪的layer
+            options.setShowCropGrid(false);//是否显示分割线
+            options.setShowCropFrame(false);//是否显示矩形边框
+        }
+//        options.setCircleDimmedLayer(true);//是否显示圆形裁剪的layer
+//        options.setDimmedLayerColor();//设置圆形的背景色
+//        options.setShowCropGrid(false);//是否显示分割线
+//        options.setCropGridColor();//设置分割线的颜色
+//        options.setCropGridStrokeWidth();
+//        options.setCropGridColumnCount();//设置分割线的列数
+//        options.setCropGridRowCount();//设置分割线的行数
+//        options.setShowCropFrame(false);//是否显示矩形边框
+//        options.setCropFrameStrokeWidth();//设置矩形边框的宽度
+//        options.setCropFrameColor();//设置矩形边框的颜色
+//        options.setFreeStyleCropEnabled(false);//设置裁剪框可移动，具体可以设置为true运行看效果
+//        options.setMaxScaleMultiplier();//设置图片放大的倍数，必须大于1
+//        options.setHideBottomControls();//是否显示底部控制菜单
+//        options.setToolbarCropDrawable();//设置裁剪确定按钮的背景图片
+//        options.setToolbarCancelDrawable();//设置裁剪取消按钮的背景图片
+//        options.setImageToCropBoundsAnimDuration();//设置图片移动到矩形框的动画时间单位毫秒数
+//        options.setToolbarWidgetColor();//设置toobar的view的颜色为透明颜色
+//        options.setCompressionFormat();//设置裁剪之后的图片的格式
+//        options.setRootViewBackgroundColor();//设置裁剪页面的根布局的颜色
+//        options.withAspectRatio();//设置图片左右拉伸的长度
+//        options.withMaxResultSize();//值小了会模糊
         options.setToolbarColor(toolBarColor);
         options.setStatusBarColor(statusBarColor);
         options.setActiveWidgetColor(bottomBarColor);
         options.setCompressionQuality(100);
-        options.setFreeStyleCropEnabled(false);
         uCrop.withOptions(options);
         uCrop.start(ImageSelectorActivity.this, requestCode);
     }
