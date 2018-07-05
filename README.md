@@ -76,7 +76,30 @@ PhotoSelector.builder()
         .setToolBarColor(ContextCompat.getColor(this, R.color.colorPrimary))//toolbar的颜色
         .setBottomBarColor(ContextCompat.getColor(this, R.color.colorPrimary))//底部bottombar的颜色
         .setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary))//状态栏的颜色
-        .start(MainActivity.this, duoxuan);//当前activity 和 requestCode，不传requestCode则默认为PhotoSelector.DEFAULT_REQUEST_CODE
+        .start(MainActivity.this, LIMIT_CODE);//当前activity 和 requestCode，不传requestCode则默认为PhotoSelector.DEFAULT_REQUEST_CODE
+        
+//裁剪
+//单选后剪裁 裁剪的话都是针对一张图片所以要设置setSingle(true)
+PhotoSelector.builder()
+       .setSingle(true)//单选，裁剪都是单选
+       .setCrop(true)//是否裁剪
+       .setCropMode(PhotoSelector.CROP_RECTANG)//设置裁剪模式 矩形还是圆形
+       .setStatusBarColor(ContextCompat.getColor(this, R.color.colorAccent))
+       .setToolBarColor(ContextCompat.getColor(this, R.color.colorAccent))
+       .setBottomBarColor(ContextCompat.getColor(this, R.color.colorAccent))
+       .setStatusBarColor(ContextCompat.getColor(this, R.color.colorAccent))
+       .start(MainActivity.this, CROP_CODE);
+
+//多选(不限数量)
+PhotoSelector.builder()
+       .setMaxSelectCount(-1)//-1不限制数量
+       .setSelected(images)
+       .start(MainActivity.this, UN_LIMITT_CODE);
+
+//单选
+PhotoSelector.builder()
+       .setSingle(true)
+       .start(MainActivity.this, SINGLE_CODE);
 ```
 REQUEST_CODE就是调用者自己定义的启动Activity时的requestCode，这个相信大家都能明白。selected可以在再次打开选择器时，把原来已经选择过的图片传入，使这些图片默认为选中状态。
 
@@ -88,36 +111,23 @@ REQUEST_CODE就是调用者自己定义的启动Activity时的requestCode，这�
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     if (resultCode == Activity.RESULT_OK && data != null) {
-        //images就是你选择的所有的照片的集合，在这里获取之后进行你的处理
-        images = data.getStringArrayListExtra(PhotoSelector.SELECT_RESULT);
         switch (requestCode) {
-            case clip:
-                //拍照直接剪切
-                if (images == null) {
-                    Uri resultUri = UCrop.getOutput(data);
-                    Glide.with(this).load(resultUri).into(imageView);
-                    return;
-                }
-                //选择之后剪切
-                Uri selectUri = Uri.fromFile(new File(images.get(0)));
-                SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA);
-                long time = System.currentTimeMillis();
-                String imageName = timeFormatter.format(new Date(time));
-                UCrop uCrop = UCrop.of(selectUri, Uri.fromFile(new File(getCacheDir(), imageName + ".jpg")));
-                UCrop.Options options = new UCrop.Options();
-                options.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary));
-                options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
-                options.setActiveWidgetColor(ContextCompat.getColor(this, R.color.colorPrimary));
-                options.setCompressionQuality(100);
-                options.setFreeStyleCropEnabled(false);
-                uCrop.withOptions(options);
-                uCrop.start(this);
+            case SINGLE_CODE:
+                //单选的话 images就只有一条数据直接get(0)即可
+                images = data.getStringArrayListExtra(PhotoSelector.SELECT_RESULT);
+                mAdapter.refresh(images);
                 break;
-            case UCrop.REQUEST_CROP://处理裁剪之后的图片
-                Uri resultUri = UCrop.getOutput(data);
+            case LIMIT_CODE:
+                images = data.getStringArrayListExtra(PhotoSelector.SELECT_RESULT);
+                mAdapter.refresh(images);
+                break;
+            case CROP_CODE:
+                //获取到裁剪后的图片的Uri进行处理
+                Uri resultUri = PhotoSelector.getCropImageUri(data);
                 Glide.with(this).load(resultUri).into(imageView);
                 break;
-            default:
+            case UN_LIMITT_CODE:
+                images = data.getStringArrayListExtra(PhotoSelector.SELECT_RESULT);
                 mAdapter.refresh(images);
                 break;
             }
