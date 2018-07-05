@@ -26,7 +26,7 @@ allprojects {
 在Module的build.gradle在添加以下代码
 
 ```
-implementation 'com.winfo.photoselector:PhotoSelector:1.1.0'
+implementation 'com.winfo.photoselector:PhotoSelector:1.2.1'
 ```
 
 
