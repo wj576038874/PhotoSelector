@@ -80,6 +80,7 @@
         android:textSize="12sp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <!--显示文件夹覆盖层背景-->
     <View
         android:id="@+id/masking"
         android:layout_width="match_parent"
@@ -89,6 +90,7 @@
         android:background="#c4111212"
         android:visibility="gone" />
 
+    <!--使用recycleview布局显示可隐藏来显示文件夹-->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_folder"
         android:layout_width="match_parent"
