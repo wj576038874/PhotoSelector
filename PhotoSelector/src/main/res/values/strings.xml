@@ -5,5 +5,8 @@
     <string name="preview">预览</string>
     <string name="select">选择</string>
     <string name="all_picture">全部图片</string>
+    <string name="confirm_maxcount">确定(%1$d/%2$d)</string>
+    <string name="confirm_count">确定(%1$d)</string>
+    <string name="preview_count">预览(%1$d)</string>
     <string name="scaleDownShowBehavior">com.winfo.photoselector.widget.ScaleDownShowBehavior</string>
 </resources>
