@@ -167,7 +167,7 @@ public class ImageSelectorActivity extends AppCompatActivity {
         bottomSheetDialog.setContentView(bsdFolderDialogView);
         rvFolder = bsdFolderDialogView.findViewById(R.id.rv_folder);
 
-        //第二种方式
+        //第二种方式  保留使用recycleview布局显示和隐藏添加动画
 //        rvFolder = findViewById(R.id.rv_folder);
         tvConfirm = findViewById(R.id.tv_confirm);
         tvPreview = findViewById(R.id.tv_preview);
@@ -432,18 +432,18 @@ public class ImageSelectorActivity extends AppCompatActivity {
         if (count == 0) {
             btnConfirm.setEnabled(false);
             btnPreview.setEnabled(false);
-            tvConfirm.setText("确定");
-            tvPreview.setText("预览");
+            tvConfirm.setText(getString(R.string.confirm));
+            tvPreview.setText(getString(R.string.preview));
         } else {
             btnConfirm.setEnabled(true);
             btnPreview.setEnabled(true);
-            tvPreview.setText("预览(" + count + ")");
+            tvPreview.setText(getString(R.string.preview_count, count));
             if (isSingle) {
-                tvConfirm.setText("确定");
+                tvConfirm.setText(getString(R.string.confirm));
             } else if (mMaxCount > 0) {
-                tvConfirm.setText("确定(" + count + "/" + mMaxCount + ")");
+                tvConfirm.setText(getString(R.string.confirm_maxcount, count, mMaxCount));
             } else {
-                tvConfirm.setText("确定(" + count + ")");
+                tvConfirm.setText(getString(R.string.confirm_count, count));
             }
         }
     }
