@@ -210,11 +210,11 @@ public class RvPreviewActivity extends AppCompatActivity {
 
         bottomPreviewAdapter.setOnItemClcikLitener(new BottomPreviewAdapter.OnItemClcikLitener() {
             @Override
-            public void OnItemClcik(int position,Image image) {
+            public void OnItemClcik(int position, Image image) {
                 if (isPreview) {
                     List<Image> imageList = previewImageAdapter.getData();
                     for (int i = 0; i < imageList.size(); i++) {
-                        if (imageList.get(i).equals(image)){
+                        if (imageList.get(i).equals(image)) {
                             recyclerView.smoothScrollToPosition(i);
                         }
                     }
@@ -230,6 +230,7 @@ public class RvPreviewActivity extends AppCompatActivity {
      * 初始化ViewPager
      */
     private PreviewImageAdapter previewImageAdapter;
+
     private void initViewPager() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -406,19 +407,18 @@ public class RvPreviewActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private void setSelectImageCount(int count) {
         if (count == 0) {
             btnConfirm.setEnabled(false);
-            tvConfirm.setText("确定");
+            tvConfirm.setText(getString(R.string.confirm));
         } else {
             btnConfirm.setEnabled(true);
             if (isSingle) {
-                tvConfirm.setText("确定");
+                tvConfirm.setText(getString(R.string.confirm));
             } else if (mMaxCount > 0) {
-                tvConfirm.setText("确定(" + count + "/" + mMaxCount + ")");
+                tvConfirm.setText(getString(R.string.confirm_maxcount, count, mMaxCount));
             } else {
-                tvConfirm.setText("确定(" + count + ")");
+                tvConfirm.setText(getString(R.string.confirm_count, count));
             }
         }
     }
@@ -431,29 +431,4 @@ public class RvPreviewActivity extends AppCompatActivity {
         setResult(PhotoSelector.RESULT_CODE, intent);
         super.finish();
     }
-
-//        /**
-//         * 修改状态栏颜色
-//         *
-//         * @param statusBarColor 颜色值
-//         */
-//        private void setStatusBarColor(int statusBarColor) {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                Window window = getWindow();
-//                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//                window.setStatusBarColor(ContextCompat.getColor(this, statusBarColor));
-//            }
-//        }
-
-//    /**
-//     * 获取状态栏高度
-//     */
-//    public static int getStatusBarHeight(Context context) {
-//        int result = 0;
-//        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-//        if (resourceId > 0) {
-//            result = context.getResources().getDimensionPixelSize(resourceId);
-//        }
-//        return result;
-//    }
 }
