@@ -45,6 +45,7 @@ PhotoSelector的图片加载是基于glide4.7.1实现的，可以自定义加载
 ```
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+<!--注意这里的android:theme="@style/AppTheme" AppTheme一定要是NoActionbar类型的主题-->
 <activity
     android:name="com.yalantis.ucrop.UCropActivity"
     android:screenOrientation="portrait"
