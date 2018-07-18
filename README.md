@@ -2,7 +2,9 @@
 Android图片选择器，仿微信的图片选择器的样式和效果。可横竖屏切换显示,
 自定义配置，单选，多选，是否显示拍照，material design风格，单选裁剪，拍照裁剪，滑动翻页预览，双击放大，缩放
 
-#kotlin版 ![kotlin版](https://github.com/wj576038874/PhotoSlectorKotlin)
+#kotlin版 
+[kotlin版](https://github.com/wj576038874/PhotoSlectorKotlin)
+
 效果图： [点击下载APK进行体验](https://raw.githubusercontent.com/wj576038874/PhotoSelectorDemo/master/apk/PhotoSelector.apk)
 
 ![相册](https://github.com/wj576038874/PhotoSelectorDemo/blob/master/images/selector.jpg)
