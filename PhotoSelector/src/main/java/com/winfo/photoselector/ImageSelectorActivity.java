@@ -15,20 +15,20 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -284,7 +284,7 @@ public class ImageSelectorActivity extends AppCompatActivity {
 //        options.withMaxResultSize();//值小了会模糊
         options.setToolbarColor(toolBarColor);
         options.setStatusBarColor(statusBarColor);
-        options.setActiveWidgetColor(bottomBarColor);
+        options.setActiveControlsWidgetColor(bottomBarColor);
         options.setCompressionQuality(100);
         uCrop.withOptions(options);
         uCrop.start(ImageSelectorActivity.this, requestCode);
@@ -667,15 +667,17 @@ public class ImageSelectorActivity extends AppCompatActivity {
 //            Toast.makeText(this, "没有图片", Toast.LENGTH_LONG).show();
             return;
         }
-        int hasWriteContactsPermission = ContextCompat.checkSelfPermission(getApplication(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (hasWriteContactsPermission == PackageManager.PERMISSION_GRANTED) {
+        String readPermission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                ? Manifest.permission.READ_MEDIA_IMAGES
+                : Manifest.permission.READ_EXTERNAL_STORAGE;
+        int readPermissionState = ContextCompat.checkSelfPermission(getApplication(), readPermission);
+        if (readPermissionState == PackageManager.PERMISSION_GRANTED) {
             //有权限，加载图片。
             loadImageForSDCard();
         } else {
             //没有权限，申请权限。
             ActivityCompat.requestPermissions(ImageSelectorActivity.this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+                    new String[]{readPermission}, PERMISSION_REQUEST_CODE);
         }
     }
 

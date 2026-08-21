@@ -2,7 +2,7 @@ package com.winfo.photoselector.utils;
 
 import android.Manifest;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 
 public class PermissionsConstant {
 
@@ -11,8 +11,7 @@ public class PermissionsConstant {
     public static final int REQUEST_EXTERNAL_WRITE = 3;
 
     public static final String[] PERMISSIONS_CAMERA = {
-            Manifest.permission.CAMERA,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Manifest.permission.CAMERA
     };
     public static final String[] PERMISSIONS_EXTERNAL_WRITE = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE

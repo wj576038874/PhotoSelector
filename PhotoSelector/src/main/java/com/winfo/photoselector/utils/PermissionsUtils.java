@@ -3,13 +3,11 @@ package com.winfo.photoselector.utils;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 
 public class PermissionsUtils {
@@ -18,14 +16,16 @@ public class PermissionsUtils {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             return true;
         }
+        String readPermission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                ? android.Manifest.permission.READ_MEDIA_IMAGES
+                : android.Manifest.permission.READ_EXTERNAL_STORAGE;
         int readStoragePermissionState =
-                ContextCompat.checkSelfPermission(activity, READ_EXTERNAL_STORAGE);
+                ContextCompat.checkSelfPermission(activity, readPermission);
 
         boolean readStoragePermissionGranted = readStoragePermissionState == PackageManager.PERMISSION_GRANTED;
 
         if (!readStoragePermissionGranted) {
-            ActivityCompat.requestPermissions(activity,
-                    PermissionsConstant.PERMISSIONS_EXTERNAL_READ,
+            ActivityCompat.requestPermissions(activity, new String[]{readPermission},
                     PermissionsConstant.REQUEST_EXTERNAL_READ);
         }
         return readStoragePermissionGranted;
@@ -33,9 +33,12 @@ public class PermissionsUtils {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public static boolean checkWriteStoragePermission(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return true;
+        }
 
         int writeStoragePermissionState =
-                ContextCompat.checkSelfPermission(activity, WRITE_EXTERNAL_STORAGE);
+                ContextCompat.checkSelfPermission(activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         boolean writeStoragePermissionGranted = writeStoragePermissionState == PackageManager.PERMISSION_GRANTED;
 

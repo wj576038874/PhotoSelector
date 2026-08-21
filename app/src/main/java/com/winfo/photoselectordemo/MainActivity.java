@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -73,48 +73,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_single:
-                //单选
-                PhotoSelector.builder()
-                        .setSingle(true)
-                        .start(MainActivity.this, SINGLE_CODE);
-                break;
-
-            case R.id.btn_limit:
-                //多选(最多9张)
-                PhotoSelector.builder()
-                        .setShowCamera(true)//显示拍照
-                        .setMaxSelectCount(9)//最大选择9 默认9，如果这里设置为-1则是不限数量
-                        .setSelected(images)//已经选择的照片
-                        .setGridColumnCount(3)//列数
-                        .setMaterialDesign(true)//design风格
-                        .setToolBarColor(ContextCompat.getColor(this, R.color.colorPrimary))//toolbar的颜色
-                        .setBottomBarColor(ContextCompat.getColor(this, R.color.colorPrimary))//底部bottombar的颜色
-                        .setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary))//状态栏的颜色
-                        .start(MainActivity.this, LIMIT_CODE);//当前activity 和 requestCode，不传requestCode则默认为PhotoSelector.DEFAULT_REQUEST_CODE
-                break;
-
-            case R.id.btn_unlimited:
-                //多选(不限数量)
-                PhotoSelector.builder()
-                        .setMaxSelectCount(-1)//-1不限制数量
-                        .setSelected(images)
-                        .start(MainActivity.this, UN_LIMITT_CODE);
-                break;
-
-            case R.id.btn_clip:
-                //单选后剪裁 裁剪的话都是针对一张图片所以要设置setSingle(true)
-                PhotoSelector.builder()
-                        .setSingle(true)//单选，裁剪都是单选
-                        .setCrop(true)//是否裁剪
-                        .setCropMode(PhotoSelector.CROP_RECTANG)//设置裁剪模式 矩形还是圆形
-                        .setStatusBarColor(ContextCompat.getColor(this, R.color.colorAccent))
-                        .setToolBarColor(ContextCompat.getColor(this, R.color.colorAccent))
-                        .setBottomBarColor(ContextCompat.getColor(this, R.color.colorAccent))
-                        .setStatusBarColor(ContextCompat.getColor(this, R.color.colorAccent))
-                        .start(MainActivity.this, CROP_CODE);
-                break;
+        int id = v.getId();
+        if (id == R.id.btn_single) {
+            //单选
+            PhotoSelector.builder()
+                    .setSingle(true)
+                    .start(MainActivity.this, SINGLE_CODE);
+        } else if (id == R.id.btn_limit) {
+            //多选(最多9张)
+            PhotoSelector.builder()
+                    .setShowCamera(true)//显示拍照
+                    .setMaxSelectCount(9)//最大选择9 默认9，如果这里设置为-1则是不限数量
+                    .setSelected(images)//已经选择的照片
+                    .setGridColumnCount(3)//列数
+                    .setMaterialDesign(true)//design风格
+                    .setToolBarColor(ContextCompat.getColor(this, R.color.colorPrimary))//toolbar的颜色
+                    .setBottomBarColor(ContextCompat.getColor(this, R.color.colorPrimary))//底部bottombar的颜色
+                    .setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary))//状态栏的颜色
+                    .start(MainActivity.this, LIMIT_CODE);//当前activity 和 requestCode，不传requestCode则默认为PhotoSelector.DEFAULT_REQUEST_CODE
+        } else if (id == R.id.btn_unlimited) {
+            //多选(不限数量)
+            PhotoSelector.builder()
+                    .setMaxSelectCount(-1)//-1不限制数量
+                    .setSelected(images)
+                    .start(MainActivity.this, UN_LIMITT_CODE);
+        } else if (id == R.id.btn_clip) {
+            //单选后剪裁 裁剪的话都是针对一张图片所以要设置setSingle(true)
+            PhotoSelector.builder()
+                    .setSingle(true)//单选，裁剪都是单选
+                    .setCrop(true)//是否裁剪
+                    .setCropMode(PhotoSelector.CROP_RECTANG)//设置裁剪模式 矩形还是圆形
+                    .setStatusBarColor(ContextCompat.getColor(this, R.color.colorAccent))
+                    .setToolBarColor(ContextCompat.getColor(this, R.color.colorAccent))
+                    .setBottomBarColor(ContextCompat.getColor(this, R.color.colorAccent))
+                    .setStatusBarColor(ContextCompat.getColor(this, R.color.colorAccent))
+                    .start(MainActivity.this, CROP_CODE);
         }
     }
 }
